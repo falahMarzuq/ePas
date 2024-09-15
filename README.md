@@ -1,3 +1,6 @@
+http://muhammad-falah-epas.pbp.cs.ui.ac.id/
+
+**Langkah-langkah pembuatan:**
 1. Membuat folder tugas 2 yang akan menjadi direktori utama dari proyek
 2. Melakukan inisiasi git pada folder tersebut (menjalankan command git init)
 3. Membuat repository baru di github dan menjalankan command git remote add origin <URL repository ini>
@@ -10,8 +13,11 @@
 10. Menambahkan path di urls.py dalam direktori utama dan direktori main yang akan menampilkan halaman utama website
 11. Melakukan push ke github dan pws
 
+**Apa fungsi git dalam pengembangan perangkat lunak?**
 Git adalah sistem kontrol versi terdistribusi yang banyak digunakan dalam pengembangan perangkat lunak. Git memungkinkan pengembang untuk melacak perubahan pada kode sumber dari waktu ke waktu. Setiap perubahan dicatat sehingga pengembang dapat kembali ke versi sebelumnya jika diperlukan.
 
+**Mengapa Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?**
 Django mengikuti prinsip "Convention over Configuration", yang berarti banyak keputusan umum sudah dibuat untuk Anda, memungkinkan pengembang fokus pada pengembangan fitur. Django juga menggunakan arsitektur MVT yang memisahkan logika bisnis dari tampilan, sehingga memudahkan pengembangan dan pemeliharaan kode.
 
+**Mengapa Django disebut ORM?**
 Django disebut ORM (Object-Relational Mapping) karena framework ini menyediakan mekanisme yang memungkinkan pengembang berinteraksi dengan basis data menggunakan objek-objek python sebagai pengganti penulisan perintah SQL secara langsung. Dengan Django ORM, setiap tabel dalam database direpresentasikan sebagai kelas model Python, dan setiap baris dalam tabel tersebut diwakili sebagai instansi objek dari kelas tersebut.
