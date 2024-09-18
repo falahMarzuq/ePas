@@ -38,7 +38,7 @@ Kita membutuhkan csrf_token saat membuat form di Django untuk melindungi aplikas
 
 ![gambar](xml.png)
 ![gambar](xmlfilter.png)
-![gambar](json.png)
+![gambar](jsonr.png)
 ![gambar](jsonfilter.png)
 
 **Langkah-langkah pengimplementasian Tugas 2:**
