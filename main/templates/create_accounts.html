@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block meta %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+}
+header {
+    background-color: white;
+    padding: 30px;
+    color: #0073e6;
+    text-align: center;
+}
+
+.signup {
+    display: flex;
+    height: 300px;
+    justify-content: center;
+}
+.formbox {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    padding: 30px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+form {
+    display: flex;
+}
+
+</style>
+{% endblock meta%}
+
+{% block content %}
+<header><h1>ePas</h1></header>
+<section>
+  <div class="signup">
+    <div class="formbox">
+      <form method="POST">
+        {% csrf_token %}
+        <table>
+          {{ form.as_table }}
+          <tr>
+            <td></td>
+            <td>
+              <input type="submit" value="Sign Up" />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
