@@ -1,26 +1,28 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core import serializers
-from main.forms import ProductsForm, Signup
+from django.urls import reverse
+from main.forms import ProductsForm
 from main.models import Products
-from main.models import Accounts
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
+from django.contrib import messages
+import datetime
 
 # Create your views here.
+@login_required(login_url='/login')
 def show_main(request):
-    products = Products.objects.all()
-    if 'first_name' in request.session:
-        message = "Welcome, " + request.session['first_name'] + "!"
+    products = Products.objects.filter(user=request.user)
+    cookie = request.COOKIES.get('last_login', None)
+    if cookie == None:
+        return redirect('main:login')
     else:
-        message = "Welcome to My Shop!"
-
-    context = {
-        'welcome' : message,
-        'name' : 'Baju',
-        'price': 'Rp1.000.000',
-        'description': 'Baju dengan kualitas terbaik di Indonesia',
-        'products' : products
-    }
+        context = {
+            'welcome' : f"Welcome, {request.user.username}!",
+            'products' : products,
+            'last_login': request.COOKIES.get('last_login', None)
+        }
 
     return render(request, "main.html", context)
 
@@ -28,23 +30,48 @@ def create_products(request):
     form = ProductsForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":
-        form.save()
+        product = form.save(commit=False)
+        product.user = request.user
+        product.save()
         return redirect('main:show_main')
     
     context = {'form': form}
-    return render(request, "create_accounts.html", context)
+    return render(request, "create_products.html", context)
 
-def create_accounts(request):
-    form = Signup(request.POST or None)
+def register(request):
+    form = UserCreationForm()
 
-    if form.is_valid() and request.method == "POST":
-        form.save()
-        name = request.POST.get('first_name')
-        request.session['first_name'] = name
-        return redirect('main:show_main')
-    
-    context = {'form': form}
-    return render(request, "create_accounts.html", context)
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+
+def login_user(request):
+   if request.method == 'POST':
+      form = AuthenticationForm(data=request.POST)
+
+      if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main"))
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+            
+   else:
+      form = AuthenticationForm(request)
+   context = {'form': form}
+   return render(request, 'login.html', context)
+
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+
 
 def show_xml(request):
     data = Products.objects.all()
@@ -61,9 +88,3 @@ def show_xml_by_id(request, id):
 def show_json_by_id(request, id):
     data = Products.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
-@csrf_exempt
-def clear_session(request):
-    # Clear all session data
-    request.session.flush()
-    return HttpResponse('Session cleared')
