@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
             display: flex;
             justify-content: center;
             background: #f4f4f4;
-            padding: 10px 0;
+            padding: 10px 10px;
         }
         nav a {
             margin: 0 15px;
@@ -33,6 +34,67 @@
         nav a:hover {
             color: #0073e6;
         }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        .nav-links {
+          list-style: none;
+          display: flex;
+        }
+        .nav-links li {
+          margin-left: 20px;
+        }
+        .nav-links a {
+          color: #333;
+          text-decoration: none;
+          padding: 0.5rem 1rem;
+          transition: background 0.3s ease;
+        }
+
+        .menu-icon {
+          display: none;
+          flex-direction: column;
+          cursor: pointer;
+        }
+        .menu-icon span {
+          width: 25px;
+          height: 3px;
+          background-color: #0073e6;
+          margin: 4px 0;
+        }
+
+        .mobile-menu {
+          display: none;
+          list-style: none;
+          background-color: #f4f4f4;
+          text-align: center;
+        }
+        .mobile-menu li {
+          padding: 1rem 0;
+        }
+        .mobile-menu a {
+          display: block;
+          text-decoration: none;
+          color: #333;
+          font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+          .nav-links {
+            display: none;
+          }
+          .menu-icon {
+            display: flex;
+          }
+          .mobile-menu.active {
+            display: block;
+          }
+        }
+
         .title {
             background-color: gray;
             height: 300px;
@@ -78,8 +140,18 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        .product-info button a{
+          text-decoration: none;
+          color: white;
+        }
         .product-info button:hover {
             background-color: #005bb5;
+        }
+        .no-products {
+          background-color: white;
+          padding: 10px;
+          color: black;
+          text-align: center;
         }
 
         footer {
@@ -101,33 +173,80 @@
     </header>
 
     <nav>
-        <a href="#">Home</a>
-        <a href="#">Shop</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-        <a href="{% url 'main:create_products' %}">Add Product</a>
-        <a href="{% url 'main:logout' %}">Logout</a>
+      <div>
+  
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="{% url 'main:create_product' %}">Add Product</a></li>
+          <li><a href="{% url 'main:logout' %}">Logout</a></li>
+        </ul>
+  
+        <div class="menu-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+  
+      <ul class="mobile-menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="{% url 'main:create_product' %}">Add Product</a></li>
+        <li><a href="{% url 'main:logout' %}">Logout</a></li>
+      </ul>
     </nav>
 
     <section class="title">
         <div>{{ welcome }}</div>
     </section>
+    {% if not products %}
+    <div class="no-products">
+      <img src="{% static 'image/sedih-banget.png' %}"/>
+      <p>Belum ada product:(</p>
+    </div>
+    {% else %}
     <section class="products">
         {% for product in products %}
         <div class="product-card">
             <div class="product-info">
+                <a href="{% url 'main:delete_product' product.pk %}">
+                  <button>
+                    X
+                  </button>
+                </a>
+                <p> </p>
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.description }}</p>
                 <p>Rp{{ product.price }}</p>
                 <button>Add to Cart</button>
+                <a href="{% url 'main:edit_product' product.pk %}">
+                  <button>
+                      Edit
+                  </button>
+                </a>
             </div>
         </div>
         {% endfor %}
     </section>
+    {% endif %}
 
     <footer>
         <p>Seri terakhir login: {{ last_login }}</p>
     </footer>
+
+    <script>
+      const menuIcon = document.querySelector('.menu-icon');
+      const mobileMenu = document.querySelector('.mobile-menu');
+
+      menuIcon.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+      });
+    </script>
 
 </body>
 </html>
