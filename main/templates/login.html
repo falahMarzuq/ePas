@@ -12,48 +12,42 @@
   }
 
   .login {
-    width: 400px; /* Set a fixed width */
+    width: 400px;
     display: flex;
-    flex-direction: column; /* Makes items stack vertically */
-    align-items: center; /* Centers the form horizontally */
+    flex-direction: column; 
+    align-items: center;
     justify-content: center;
-    margin: 50px auto; /* Center the form on the page */
+    margin: 50px auto; 
     padding: 20px;
-    background-color: #f8f8f8; /* Light gray background */
-    border: 1px solid #ccc; /* Border around the form */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Drop shadow for some depth */
+    background-color: #f8f8f8; 
+    border: 1px solid #ccc; 
+    border-radius: 10px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Style for the form header */
 .login h1 {
-  text-align: center; /* Center the text */
+  text-align: center; 
   font-size: 24px;
   margin-bottom: 20px;
-  color: #333; /* Darker text color */
-}
+  color: #333;
 
-/* Style for the submit button */
 .btn.login_btn {
-  width: 100%; /* Full width button */
+  width: 100%;
   padding: 10px;
-  background-color: #0073e6; /* Bootstrap green color */
-  color: #fff; /* White text */
+  background-color: #0073e6; 
+  color: #fff; 
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
 }
 
-/* Hover effect for the button */
 .btn.login_btn:hover {
-  background-color: #005bb5; /* Slightly darker green */
-}
+  background-color: #005bb5; 
 
-/* Style for the messages */
 ul {
   padding-left: 0;
-  list-style-type: none; /* Remove bullet points */
+  list-style-type: none;
   margin-bottom: 15px;
 }
 
@@ -92,5 +86,4 @@ ul {
   <p>Don't have an account yet? <a href="{% url 'main:register' %}">Register Here</a></p>
   
 </div>
-
 {% endblock content %}
