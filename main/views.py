@@ -8,19 +8,19 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 import datetime
 
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
-    products = Product.objects.filter(user=request.user)
     cookie = request.COOKIES.get('last_login', None)
     if cookie == None:
         return redirect('main:login')
     else:
         context = {
             'welcome' : f"Welcome, {request.user.username}!",
-            'products' : products,
             'last_login': request.COOKIES.get('last_login', None)
         }
 
@@ -37,6 +37,23 @@ def create_product(request):
     
     context = {'form': form}
     return render(request, "create_product.html", context)
+
+@csrf_exempt
+@require_POST
+def create_product_ajax(request):
+    name = request.POST.get("name")
+    price = request.POST.get("price")
+    description = request.POST.get("description")
+    user = request.user
+
+    new_product = Product(
+        name=name, price=price,
+        description=description,
+        user=user
+    )
+    new_product.save()
+
+    return HttpResponse(b"CREATED", status=201)
 
 def edit_product(request, id):
     product = Product.objects.get(pk = id)
@@ -91,11 +108,11 @@ def logout_user(request):
 
 
 def show_xml(request):
-    data = Product.objects.all()
+    data = Product.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = Product.objects.all()
+    data = Product.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):
